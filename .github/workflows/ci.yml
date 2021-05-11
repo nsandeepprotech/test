@@ -35,8 +35,8 @@ jobs:
       - name: ping google, system host and localhost in windows
         run: ping google.com ; ping fv-az30-194 ; ping localhost
         
-      - name: ping google, system host and localhost in windows
-        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress
+      - name: get ipv4 from windows and set ipv4 adress in ansible host file.
+        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts"
         
       - name: check winrm status before
         run: (Get-Service -Name winrm).Status
@@ -50,9 +50,6 @@ jobs:
         
       - name: check winrm config
         run: winrm get winrm/config
-        
-      - name: add host to hostname
-        run: Add-Content -Path "hosts" -Value "server1 ansible_host=$env:computername" ; get-content "hosts"
         
       - name: cp hosts to ProgramData
         run: Copy-Item "hosts" C:\ProgramData\
