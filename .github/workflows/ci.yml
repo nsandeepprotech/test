@@ -1,0 +1,91 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# change the ubuntu version as needed
+env:
+  ubuntu_version: "1804"
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: check username,hostname,date in windows
+        run: whoami;hostname;date
+        
+      - name: ping google, system host and localhost in windows
+        run: ping google.com ; ping fv-az30-194 ; ping localhost
+
+      - name: check winrm status before
+        run: (Get-Service -Name winrm).Status
+        
+      - name: setup winrm
+        run: dir; powershell ./windows-winrm-setup.ps1
+        
+      - name: check winrm config
+        run: winrm get winrm/config;exit 1
+        
+      - name: add host to hostname
+        run: Add-Content -Path "hosts" -Value "server1 ansible_host=$env:computername" ; get-content "hosts"
+        
+      - name: cp hosts to ProgramData
+        run: Copy-Item "hosts" C:\ProgramData\
+        
+        
+      # Runs a single command using the runners shell
+      - name: Enable windows subsytem
+        run: dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+        
+      - name: Download Ubuntu from aka.ms
+        run: Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-${{env.ubuntu_version}} -OutFile Ubuntu.appx -UseBasicParsing
+        
+      - name: Rename and unzip Ubuntu
+        run: Rename-Item .\Ubuntu.appx .\Ubuntu.zip ; Expand-Archive .\Ubuntu.zip .\Ubuntu
+        
+      - name: install user in ubuntu${{env.ubuntu_version}}
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe install --root
+  
+  
+      - name: open ubuntu and ping windows host from ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts'
+        
+      - name: open ubuntu and check uname -a
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a'
+       
+      # reduce apt get update faster using below cmds.
+      - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'export DEBIAN_FRONTEND=noninteractive ;apt-add-repository ppa:ansible/ansible;apt-get -y update ;apt-get -y upgrade ;apt-get -y autoremove ;apt-get -y autoclean'
+        
+      
+      - name: install ansible and check ansible version in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'apt-get install ansible -y;ansible --version'
+      
+      - name: check python3 version and install pip3 and check pip3 version in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python3 --version; apt install python3-pip -y ; pip3 --version; pip3 install pywinrm'
+        
+      - name: python version and install pip and check pip version in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
+        
+      - name: check ansible host inventory and run ansible playbook
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m ping'
+        
+     
