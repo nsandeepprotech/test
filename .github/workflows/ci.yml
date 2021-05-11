@@ -34,7 +34,10 @@ jobs:
         
       - name: ping google, system host and localhost in windows
         run: ping google.com ; ping fv-az30-194 ; ping localhost
-
+        
+      - name: ping google, system host and localhost in windows
+        run: $ipV4  = Test-Connection -ComputerName localhost -Count 1  | Select IPV4Address ; $ipV4; exit 1
+        
       - name: check winrm status before
         run: (Get-Service -Name winrm).Status
         
@@ -73,7 +76,7 @@ jobs:
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts'
         
       - name: open ubuntu and check uname -a
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a; ip addr show ; exit 1'
        
       # reduce apt get update faster using below cmds.
       - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
