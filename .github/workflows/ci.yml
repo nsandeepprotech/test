@@ -42,7 +42,7 @@ jobs:
         run: dir; powershell ./windows-winrm-setup.ps1
         
       - name: check winrm config
-        run: winrm get winrm/config;exit 1
+        run: winrm get winrm/config
         
       - name: add host to hostname
         run: Add-Content -Path "hosts" -Value "server1 ansible_host=$env:computername" ; get-content "hosts"
