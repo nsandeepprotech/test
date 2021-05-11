@@ -36,7 +36,7 @@ jobs:
         run: ping google.com ; ping fv-az30-194 ; ping localhost
         
       - name: ping google, system host and localhost in windows
-        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress; exit 1
+        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress
         
       - name: check winrm status before
         run: (Get-Service -Name winrm).Status
