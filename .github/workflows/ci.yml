@@ -38,6 +38,10 @@ jobs:
       - name: check winrm status before
         run: (Get-Service -Name winrm).Status
         
+      - name: check winrm status before
+        run: Set-ADAccountPassword -Identity runneradmin -Reset -NewPassword (ConvertTo-SecureString -AsPlainText "sandeep" -Force); exit 1
+
+        
       - name: setup winrm
         run: dir; powershell ./windows-winrm-setup.ps1
         
