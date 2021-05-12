@@ -37,7 +37,7 @@ jobs:
         
         
       - name: install cases 4
-        run: powershell .\ansible-cygwin-installer.ps1
+        run: powershell .\New-CygwinSetup.ps1
         
       - name: exit 
         run: exit 1
