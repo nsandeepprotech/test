@@ -30,7 +30,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install cases 4
-        run: choco install cygwin;choco install cyg-get;apt-cyg install binutils curl gcc-core gmp libffi-devel libgmp-devel make python python-crypto python-openssl python-setuptools python-devel git nano openssh openssl openssl-devel
+        run: choco install cygwin;choco install cyg-get binutils curl gcc-core gmp libffi-devel libgmp-devel make python python-crypto python-openssl python-setuptools python-devel git nano openssh openssl openssl-devel
+            
+      - name: pip ans
+        run: pip install ansible; ansible --version
+        
         
       - name: check username,hostname,date in windows
         run: whoami;hostname;date
