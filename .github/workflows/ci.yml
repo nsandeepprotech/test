@@ -29,8 +29,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: install cases 4
-        run: choco install cygwin;choco install cyg-get binutils curl gcc-core gmp libffi-devel libgmp-devel make python python-crypto python-openssl python-setuptools python-devel git nano openssh openssl openssl-devel
+      - name: install cases 4 choco install cygwin and choco install cyg-get
+        run: choco install cygwin;choco install cyg-get
+        
+      - name: install cases 5 cyg-get install packages
+        run: cyg-get binutils curl gcc-core gmp libffi-devel libgmp-devel make python python-crypto python-openssl python-setuptools python-devel git nano openssh openssl openssl-devel
             
       - name: pip ans
         run: pip install ansible; ansible --version
