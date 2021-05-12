@@ -71,6 +71,12 @@ jobs:
   
       - name: open ubuntu and ping windows host from ubuntu
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts'
+       
+              
+      # reduce apt get update faster using below cmds.
+      - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'export DEBIAN_FRONTEND=noninteractive ;apt-add-repository ppa:ansible/ansible;apt-get -y update ;apt-get -y upgrade ;apt-get -y autoremove ;apt-get -y autoclean'
+        
         
       - name: install cases 0
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install winbind -y ;sudo apt-get install libnss-winbind -y;sudo apt-get install libpam-winbind -y'
@@ -88,12 +94,6 @@ jobs:
         
       - name:  open ubuntu and check uname -a
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a; ip addr show ;'
-        
-
-       
-      # reduce apt get update faster using below cmds.
-      - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'export DEBIAN_FRONTEND=noninteractive ;apt-add-repository ppa:ansible/ansible;apt-get -y update ;apt-get -y upgrade ;apt-get -y autoremove ;apt-get -y autoclean'
         
       
       - name: install ansible and check ansible version in ubuntu
