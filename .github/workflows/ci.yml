@@ -37,7 +37,7 @@ jobs:
         
         
       - name: install cases 4
-        run: powershell .\New-CygwinSetup.ps1
+        run: choco install cygwin;choco install cyg-get;cyg-get git ansible
         
       - name: exit 
         run: exit 1
