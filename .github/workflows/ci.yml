@@ -72,21 +72,24 @@ jobs:
       - name: open ubuntu and ping windows host from ubuntu
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts'
         
-        
+      - name: install cases 0
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install winbind -y ;sudo apt-get install libnss-winbind -y;sudo apt-get install libpam-winbind -y'
+
+
       - name: test cases 0
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ping $localIpAddress'
         
       - name: test cases 1
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo service ufw status;sudo service ufw stop;sudo service ufw status'
         
-        
+     
       - name: test cases 2
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ping $localIpAddress ;  exit 1'
+        run: $localIpAddressu=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddressu;cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ping $localIpAddressu; exit 1'
         
-      - name: open ubuntu and check uname -a
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a; ip addr show ;ping $localIpAddress'
+      - name:  open ubuntu and check uname -a
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a; ip addr show ;'
         
-      
+
        
       # reduce apt get update faster using below cmds.
       - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
