@@ -101,8 +101,8 @@ jobs:
         #run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo service ufw status;sudo service ufw stop;sudo service ufw status'
         
      
-      - name: test cases 2
-        run: $localIpAddressu=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddressu;cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ping $localIpAddressu; exit 1'
+     # - name: test cases 2
+        #run: $localIpAddressu=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddressu;cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ping $localIpAddressu; exit 1'
         
       - name:  open ubuntu and check uname -a
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a; ip addr show ;'
@@ -111,11 +111,11 @@ jobs:
       - name: install ansible and check ansible version in ubuntu
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'apt-get install ansible -y;ansible --version'
       
-      - name: check python3 version and install pip3 and check pip3 version in ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python3 --version; apt install python3-pip -y ; pip3 --version; pip3 install pywinrm'
+     # - name: check python3 version and install pip3 and check pip3 version in ubuntu
+       # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python3 --version; apt install python3-pip -y ; pip3 --version; pip3 install pywinrm'
         
-      - name: python version and install pip and check pip version in ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
+      #- name: python version and install pip and check pip version in ubuntu
+        #run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
         
       - name: check ansible host inventory and run ansible playbook
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m ping'
