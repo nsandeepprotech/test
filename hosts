@@ -1,9 +1,11 @@
 [all:vars]
 
+ansible_port=5896
 ansible_user=runneradmin
 ansible_password=GUn701-752hgf-88dN8G-74iLs
-ansible_connection=ssh
-ansible_shell_type=powershell
+ansible_connection=winrm
+ansible_winrm_transport=basic
+ansible_winrm_server_cert_validation=ignore
 ansible_python_interpreter=/usr/bin/python3
 
 [servers]
