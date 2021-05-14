@@ -108,7 +108,9 @@ jobs:
   
       - name: open ubuntu and ping windows host from ubuntu
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'chmod 400 /mnt/c/ProgramData/id_rsa_windows; ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
-       
+     
+      - name:  set host key
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo mkdir -p /root/.ssh/ ; sudo touch /root/.ssh/known_hosts ; $windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; echo "ssh-keyscan -H $windows_ip" ; exit 1'
               
       # reduce apt get update faster using below cmds.
       - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
@@ -121,10 +123,6 @@ jobs:
         
       - name: install netcat
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install netcat -y ;nc -vz 127.0.0.1 22; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;nc -vz $windows_ip 22; nc -vz $windows_ip 5985;nc -vz $windows_ip 5986 '
-       
-            
-      - name:  set host key
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo mkdir -p /root/.ssh/; sudo touch /root/.ssh/known_hosts ; $windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)";sudo ssh-keyscan -H $windows_ip >> /root/.ssh/known_hosts'
         
         
       #- name:  sudo apt-get install sshpass
