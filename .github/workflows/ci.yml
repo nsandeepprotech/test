@@ -45,7 +45,7 @@ jobs:
         run: ping google.com ; ping localhost
         
       - name: get ipv4 from windows and set ipv4 adress in ansible host file.
-        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts;$localIpAddress | Out-File C:\ProgramData\window_hostname.txt"
+        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts" ; $localIpAddress | Out-File C:\ProgramData\window_hostname.txt
         
       - name: check winrm status before
         run: (Get-Service -Name winrm).Status
