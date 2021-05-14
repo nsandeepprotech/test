@@ -4,5 +4,7 @@ ansible_user=runneradmin
 ansible_connection=ssh
 ansible_password=GUn701-752hgf-88dN8G-74iLs
 ansible_shell_type=powershell
-private_key_file=/mnt/c/ProgramData/id_rsa_windows
+ansible_python_interpreter=/usr/bin/python3
+private_key_file=/root/.ssh/id_rsa
+
 [servers]
