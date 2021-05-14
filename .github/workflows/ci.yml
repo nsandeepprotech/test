@@ -58,11 +58,11 @@ jobs:
       - name: create ssh keys
         run: cd C:\Users\runneradmin; mkdir .ssh ; cd .ssh; ssh-keygen -t rsa -C "nsandeepprotech" -f "id_rsa_windows" -P """"
         
-      - name: login to ssh
-        run: cd C:\Users\runneradmin\.ssh\ ;ssh -tt runneradmin@$localIpAddress -i id_rsa_windows
+      - name: copy ssh keys
+        run: cd C:\Users\runneradmin\.ssh\ ;  Copy-Item "id_rsa_windows" C:\ProgramData\
         
-      - name: exit
-        run: exit 1
+      #- name: exit
+       # run: exit 1
         
       #- name: check username,hostname,date in windows
        # run: whoami;hostname;date
@@ -107,7 +107,7 @@ jobs:
   
   
       - name: open ubuntu and ping windows host from ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'chmod 400 /mnt/c/ProgramData/id_rsa_windows; ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
        
               
       # reduce apt get update faster using below cmds.
@@ -144,13 +144,13 @@ jobs:
       - name: install ansible and check ansible version in ubuntu
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'apt-get install ansible -y;ansible --version'
       
-      - name: check python3 version and install pip3 and check pip3 version in ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python3 --version; apt install python3-pip -y ; pip3 --version; pip3 install pywinrm'
+      #- name: check python3 version and install pip3 and check pip3 version in ubuntu
+       # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python3 --version; apt install python3-pip -y ; pip3 --version; pip3 install pywinrm'
         
-      - name: python version and install pip and check pip version in ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
+      #- name: python version and install pip and check pip version in ubuntu
+       # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
         
       - name: check ansible host inventory and run ansible playbook
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m ping -vvvv'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m ping -private-key "/mnt/c/ProgramData/id_rsa_windows" -vvvv'
         
      
