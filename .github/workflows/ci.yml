@@ -122,7 +122,7 @@ jobs:
         
         
       - name: install netcat
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install netcat -y ;nc -vz 127.0.0.1 22; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;nc -vz $windows_ip 22; nc -vz $windows_ip 5985;nc -vz $windows_ip 5986; cd /root/.ssh/;pwd;cat /root/.ssh/id_rsa ; ssh runneradmin@$windowsip -i /root/.ssh/id_rsa ; exit 1'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install netcat -y ;nc -vz 127.0.0.1 22; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;nc -vz $windows_ip 22; nc -vz $windows_ip 5985;nc -vz $windows_ip 5986; cd /root/.ssh/;pwd;cat /root/.ssh/id_rsa ; ssh runneradmin@$windowsip -i /root/.ssh/id_rsa'
         
         
       #- name:  sudo apt-get install sshpass
