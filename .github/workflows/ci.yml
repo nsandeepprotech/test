@@ -59,7 +59,7 @@ jobs:
         run: cd C:\Users\runneradmin; mkdir .ssh ; cd .ssh; ssh-keygen -t rsa -C "nsandeepprotech" -f "id_rsa_windows" -P """"
         
       - name: login to ssh
-        run: cd C:\Users\runneradmin\.ssh\ ;ssh runner@$localIpAddress -i id_rsa_windows
+        run: cd C:\Users\runneradmin\.ssh\ ;ssh runner@$localIpAddress -i id_rsa_windows 'choco'
         
       - name: exit
         run: exit 1
