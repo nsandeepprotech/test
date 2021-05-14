@@ -1,7 +1,6 @@
 [all:vars]
 
 ansible_user=runneradmin
-ansible_password=GUn701-752hgf-88dN8G-74iLs
 ansible_connection=ssh
 ansible_shell_type=powershell
 ansible_python_interpreter=/usr/bin/python3
