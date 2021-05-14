@@ -60,8 +60,8 @@ jobs:
       - name: check winrm config
         run: winrm get winrm/config
         
-      - name: cp hosts to ProgramData
-        run: Copy-Item "hosts" C:\ProgramData\
+      - name: cp hosts and ansible.cfg to ProgramData
+        run: Copy-Item "hosts" C:\ProgramData\ ; Copy-Item "ansible.cfg" C:\ProgramData\ 
         
         
       # Runs a single command using the runners shell
@@ -79,7 +79,7 @@ jobs:
   
   
       - name: open ubuntu and ping windows host from ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
        
               
       # reduce apt get update faster using below cmds.
