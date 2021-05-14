@@ -37,22 +37,15 @@ jobs:
 
       - name: Test-NetConnection localhost -Port 22 
         run: Test-NetConnection localhost -Port 22 
-            
-      - name: exit
-        run: exit 1
-        
         
       - name: check username,hostname,date in windows
         run: whoami;hostname;date
         
       - name: ping google, system host and localhost in windows
-        run: ping google.com ; ping fv-az30-194 ; ping localhost
-        
-      - name: exit 
-        run: exit 1
+        run: ping google.com ; ping localhost
         
       - name: get ipv4 from windows and set ipv4 adress in ansible host file.
-        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts"
+        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts;$localIpAddress | Out-File C:\ProgramData\window_hostname.txt"
         
       - name: check winrm status before
         run: (Get-Service -Name winrm).Status
@@ -92,11 +85,17 @@ jobs:
       # reduce apt get update faster using below cmds.
       - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'export DEBIAN_FRONTEND=noninteractive ;apt-add-repository ppa:ansible/ansible;apt-get -y update ;apt-get -y upgrade ;apt-get -y autoremove ;apt-get -y autoclean'
-        
-        
+   
+   
       - name: install cases 0
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install winbind -y ;sudo apt-get install libnss-winbind -y;sudo apt-get install libpam-winbind -y'
+        
+        
+      - name: install netcat
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install netcat -y ;nc -vz 127.0.0.1 22; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22 '
 
+      - name: exit 
+        run: exit 1
 
       - name: test cases 0
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ping $localIpAddress'
