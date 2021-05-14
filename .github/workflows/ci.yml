@@ -52,18 +52,28 @@ jobs:
       - name: Test-NetConnection localhost -Port 5986 
         run: Test-NetConnection localhost -Port 5986
         
+      - name: get ipv4 from windows and set ipv4 adress in ansible host file.
+        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts" ; $localIpAddress | Out-File C:\ProgramData\window_hostname.txt
+         
+      - name: create ssh keys
+        run: cd C:\Users\runneradmin; mkdir .ssh ; cd .ssh; ssh-keygen -t rsa -C "nsandeepprotech" -f "id_rsa_windows" -P """"
+        
+      - name: login to ssh
+        run: cd C:\Users\runneradmin\.ssh\ ;ssh runner$localIpAddress -i id_rsa_windows
+        
+      - name: exit
+        run: exit 1
+        
       #- name: check username,hostname,date in windows
        # run: whoami;hostname;date
         
      # - name: ping google, system host and localhost in windows
      #   run: ping google.com ; ping localhost
         
-      #- name: get ipv4 from windows and set ipv4 adress in ansible host file.
-        #run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts" ; $localIpAddress | Out-File C:\ProgramData\window_hostname.txt
+ 
        
-       
-      - name: get ipv4 from windows and set ipv4 adress in ansible host files 
-        run: $localIpAddress=$env:COMPUTERNAME ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts" ; $localIpAddress | Out-File C:\ProgramData\window_hostname.txt
+      #- name: get ipv4 from windows and set ipv4 adress in ansible host files 
+        #run: $localIpAddress=$env:COMPUTERNAME ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts" ; $localIpAddress | Out-File C:\ProgramData\window_hostname.txt
         
      # - name: check winrm status before
       #  run: (Get-Service -Name winrm).Status
