@@ -59,7 +59,7 @@ jobs:
         run: cd C:\Users\runneradmin; mkdir .ssh ; cd .ssh; ssh-keygen -t rsa -C "nsandeepprotech" -f "id_rsa_windows" -P """"
         
       - name: copy ssh keys
-        run: cd C:\Users\runneradmin\.ssh\ ;  Copy-Item "id_rsa_windows" C:\ProgramData\
+        run: cd C:\Users\runneradmin\.ssh\ ;  Copy-Item "id_rsa" C:\ProgramData\
         
       #- name: exit
        # run: exit 1
@@ -107,7 +107,7 @@ jobs:
   
   
       - name: open ubuntu and ping windows host from ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'chmod 400 /mnt/c/ProgramData/id_rsa_windows; ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo cp /mnt/c/ProgramData/id_rsa /root/.ssh/ ; sudo chmod 400 /root/.ssh/id_rsa; sudo cat /root/.ssh/id_rsa ; ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
      
       - name:  set host key
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo mkdir -p /root/.ssh/ ; sudo touch /root/.ssh/known_hosts ; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; ssh-keyscan -H $windows_ip >> /root/.ssh/known_hosts'
