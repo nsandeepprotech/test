@@ -64,12 +64,12 @@ jobs:
      # - name: check winrm status before
       #  run: (Get-Service -Name winrm).Status
         
-      #- name: check winrm status before
-       # run: net user "runneradmin" "GUn701-752hgf-88dN8G-74iLs"
+      - name: check winrm status before
+        run: net user "runneradmin" "GUn701-752hgf-88dN8G-74iLs"
 
         
-      #- name: setup winrm
-       # run: dir; powershell ./windows-winrm-setup.ps1
+      - name: setup winrm
+        run: dir; powershell ./windows-winrm-setup.ps1
         
       #- name: check winrm config
       #  run: winrm get winrm/config
@@ -108,11 +108,10 @@ jobs:
       - name: install netcat
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install netcat -y ;nc -vz 127.0.0.1 22; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;nc -vz $windows_ip 22; nc -vz $windows_ip 5985;nc -vz $windows_ip 5986 '
        
-      - name:  sudo apt-get install sshpass
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo apt-get install sshpass -y; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22; sshpass -t -t -p GUn701-752hgf-88dN8G-74iLs ssh runneradmin@$windows_ip choco '
+      #- name:  sudo apt-get install sshpass
+       # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo apt-get install sshpass -y; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;sshpass -t -t -p GUn701-752hgf-88dN8G-74iLs ssh runneradmin@$windows_ip choco '
         
-      - name: exit
-        run: exit 1    
+
 
       #- name: test cases 0
        # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ping $localIpAddress'
@@ -131,11 +130,11 @@ jobs:
       - name: install ansible and check ansible version in ubuntu
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'apt-get install ansible -y;ansible --version'
       
-     # - name: check python3 version and install pip3 and check pip3 version in ubuntu
-       # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python3 --version; apt install python3-pip -y ; pip3 --version; pip3 install pywinrm'
+      - name: check python3 version and install pip3 and check pip3 version in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python3 --version; apt install python3-pip -y ; pip3 --version; pip3 install pywinrm'
         
-      #- name: python version and install pip and check pip version in ubuntu
-        #run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
+      - name: python version and install pip and check pip version in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
         
       - name: check ansible host inventory and run ansible playbook
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m ping'
