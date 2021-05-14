@@ -1,13 +1,10 @@
 [all:vars]
 
-ansible_port=5986
 ansible_user=runneradmin
 ansible_password=GUn701-752hgf-88dN8G-74iLs
-ansible_connection=winrm
-ansible_winrm_transport=basic
+ansible_connection=ssh
 ansible_shell_type=powershell
-ansible_shell_executable=None
-ansible_winrm_server_cert_validation=ignore
 ansible_python_interpreter=/usr/bin/python3
+private_key_file=/mnt/c/ProgramData/id_rsa_windows
 
 [servers]
