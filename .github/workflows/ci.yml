@@ -20,8 +20,8 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-    BuildWslAndExcAnsible:
-     name: BuildWslAndExcAnsible
+    BuildWslAnsible:
+     name: BuildWslAnsible
      runs-on: ${{ matrix.os }}
      strategy:
       matrix:
@@ -72,7 +72,7 @@ jobs:
         run: mkdir -p C:\ProgramData\ansible ; chmod 755 C:\ProgramData\ansible ;Copy-Item "windows_playbook.yml" C:\ProgramData\ansible
        
       - name:  Set permssions for authorized_keys
-        run: powershell ./set_permssions_for_publickey.ps1
+        run: powershell ./set_pubkey_permmisons.ps1
 
       - name: Check username,hostname,date and ping in windows
         run: whoami;hostname;date;ping google.com ; ping localhost
