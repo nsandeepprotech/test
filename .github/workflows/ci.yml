@@ -99,5 +99,5 @@ jobs:
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m win_ping'
         
       - name: Run ansible playbook
-        run : /mnt/c/ProgramData/windows_playbook.yml
+        run : cd /mnt/c/ProgramData/; ansible-playbook windows_playbook.yml
      
