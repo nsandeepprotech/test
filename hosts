@@ -1,6 +1,6 @@
 [all:vars]
 
-ansible_user=runneradmin
+ansible_ssh_user=runneradmin
 ansible_connection=ssh
 ansible_shell_type=cmd
 ansible_python_interpreter=/usr/bin/python3
