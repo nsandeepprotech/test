@@ -57,8 +57,8 @@ jobs:
       - name: Copy ssh public keys to authorized_keys
         run: cd C:\Users\$env:UserName\.ssh\ ; dir; Get-Content id_rsa.pub >> authorized_keys; Get-Content id_rsa.pub >> C:\ProgramData\ssh\administrators_authorized_keys;Get-Content C:\ProgramData\ssh\administrators_authorized_keys ; pwd; Get-Content authorized_keys ; dir ; Copy-Item "id_rsa" C:\ProgramData\
        
-      - name: copy ansible playbooks to ubuntu
-        run:  Copy-Item "windows_playbook.yml" C:\ProgramData\
+      - name: copy ansible playbooks to windows directory
+        run: Copy-Item "windows_playbook.yml" C:\ProgramData\ ;cd C:\ProgramData\ ; mkdir ansible ; chmod 755 ansible
        
       - name:  Set permssions for authorized_keys
         run: powershell ./set_permssions_for_publickey.ps1
@@ -108,5 +108,5 @@ jobs:
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m win_ping'
         
       - name: Run ansible playbook
-        run : cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'cd /mnt/c/ProgramData/; ansible-playbook windows_playbook.yml'
+        run : cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'cd /mnt/c/ProgramData/ansible; ansible-playbook windows_playbook.yml'
      
