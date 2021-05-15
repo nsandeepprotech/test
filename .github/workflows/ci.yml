@@ -154,6 +154,6 @@ jobs:
        # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'python --version;curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py;python get-pip.py ; pip install pywinrm'
         
       - name: check ansible host inventory and run ansible playbook
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m win_ping -vvvv'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m win_ping'
         
      
