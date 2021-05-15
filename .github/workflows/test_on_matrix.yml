@@ -1,0 +1,112 @@
+# This is a basic workflow to help you get started with Actions
+
+name: MATRIX
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# change the ubuntu version as needed
+env:
+  ubuntu_version: "1804"
+  windows_username: "runneradmin"
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
+      strategy:
+        matrix:
+       os: [windows-latest,windows-2016,windows-2019]
+      runs-on: ${{ matrix.os }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Install open SSHServerFeature openssh from choco pakage manager 
+        run: choco install --package-parameters=/SSHServerFeature openssh
+  
+      - name: Add New-NetFirewallRule 22
+        run: New-NetFirewallRule -Protocol TCP -LocalPort 22 -Direction Inbound -Action Allow -DisplayName SSH
+
+      - name: Test-NetConnection localhost -Port 22 
+        run: Test-NetConnection localhost -Port 22 
+        
+      - name: Set-Service sshd 
+        run: Set-Service sshd –StartupType Automatic ; Start-Service sshd
+        
+      - name: Configure PowerShell as the default shell
+        run: New-ItemProperty –Path "HKLM:\SOFTWARE\OpenSSH" –Name DefaultShell –Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" –PropertyType String –Force
+        
+      - name: Restart the service and Test-NetConnection localhost -Port 22
+        run: Restart-Service sshd ;Test-NetConnection localhost -Port 22
+        
+      - name: Get ipv4 from windows and set ipv4 adress in ansible host file.
+        run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts" ; $localIpAddress | Out-File C:\ProgramData\window_hostname.txt
+         
+      - name: Create ssh public and private keys
+        run: cd C:\Users\$env:UserName; mkdir .ssh ; cd .ssh; ssh-keygen -t rsa -C "$env:UserName" -f "id_rsa" -P """"
+        
+      - name: Copy ssh public keys to authorized_keys
+        run: cd C:\Users\$env:UserName\.ssh\ ; dir; Get-Content id_rsa.pub >> authorized_keys; Get-Content id_rsa.pub >> C:\ProgramData\ssh\administrators_authorized_keys;Get-Content C:\ProgramData\ssh\administrators_authorized_keys ; pwd; Get-Content authorized_keys ; dir ; Copy-Item "id_rsa" C:\ProgramData\
+       
+      - name: copy ansible playbooks to windows directory
+        run: mkdir -p C:\ProgramData\ansible ; chmod 755 C:\ProgramData\ansible ;Copy-Item "windows_playbook.yml" C:\ProgramData\ansible
+       
+      - name:  Set permssions for authorized_keys
+        run: powershell ./set_permssions_for_publickey.ps1
+
+      - name: Check username,hostname,date and ping in windows
+        run: whoami;hostname;date;ping google.com ; ping localhost
+        
+      - name: Copy hosts and ansible.cfg to ProgramData
+        run: Copy-Item "hosts" C:\ProgramData\ ; Copy-Item "ansible.cfg" C:\ProgramData\ 
+        
+      - name: Enable windows subsytem
+        run: dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+        
+      - name: Download Ubuntu from aka.ms
+        run: Invoke-WebRequest -Uri https://aka.ms/wsl-ubuntu-${{env.ubuntu_version}} -OutFile Ubuntu.appx -UseBasicParsing
+        
+      - name: Rename and unzip Ubuntu
+        run: Rename-Item .\Ubuntu.appx .\Ubuntu.zip ; Expand-Archive .\Ubuntu.zip .\Ubuntu
+        
+      - name: Install user in ubuntu${{env.ubuntu_version}}
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe install --root
+  
+      - name: Copy and create ssh Keys from windows to Ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo mkdir -p /root/.ssh ; sudo touch /root/.ssh/id_rsa ;sudo mkdir -p /root/.ssh/; sudo touch /root/.ssh/id_rsa ;sudo cat /mnt/c/ProgramData/id_rsa >> /root/.ssh/id_rsa; sudo chmod -R 400 /root/.ssh/id_rsa '   
+      
+      
+      - name: Copy and create ansible host and ansible.cfg files from windows to Ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
+     
+      - name:  Set Knownhost key in Ubuntu using ssh-keyscan
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo touch /root/.ssh/known_hosts ; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; ssh-keyscan -H $windows_ip >> /root/.ssh/known_hosts'
+              
+        # reduce apt get update faster exporting DEBIAN_FRONTEND=noninteractive.
+      - name:  ubuntu set noninteractive and perform update,upgrade,autoremove,autoclean in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'export DEBIAN_FRONTEND=noninteractive ;apt-add-repository ppa:ansible/ansible;apt-get -y update ;apt-get -y upgrade ;apt-get -y autoremove ;apt-get -y autoclean'
+        
+      - name: Install netcat in ubuntu and test check connectivity to windows from ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install netcat -y ;nc -vz 127.0.0.1 22; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22'
+
+      - name: Check uname and Ipadress in Ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'uname -a; ip addr show ;'
+        
+      - name: Install ansible and check ansible version in ubuntu
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'apt-get install ansible -y;ansible --version'
+
+      - name: Check ansible host inventory and check ansible connectivity to windows using win_ping
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m win_ping -u ${{env.windows_username}}'
+        
+      - name: Run ansible playbook
+        run : cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'cd /mnt/c/ProgramData/ansible; ansible-playbook windows_playbook.yml -u ${{env.windows_username}}'
+     
