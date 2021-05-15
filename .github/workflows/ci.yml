@@ -70,7 +70,7 @@ jobs:
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe install --root
   
       - name: Copy and create ssh Keys from windows to Ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo mkdir -p /root/.ssh ; sudo touch /root/.ssh/id_rsa ;cat /mnt/c/Users/${{env.windows_username}}/.ssh/authorized_keys ; ls -l /mnt/c/Users/${{env.windows_username}}/.ssh/authorized_keys ;sudo mkdir -p /root/.ssh/; sudo touch /root/.ssh/id_rsa ;sudo cat /mnt/c/ProgramData/id_rsa >> /root/.ssh/id_rsa ;sudo  ls -l /root/.ssh ; sudo chmod -R 400 /root/.ssh/id_rsa;sudo  ls -l /root/.ssh ; sudo cat /root/.ssh/id_rsa ; ls -lrt /mnt/c/ProgramData/'   
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo mkdir -p /root/.ssh ; sudo touch /root/.ssh/id_rsa ;sudo mkdir -p /root/.ssh/; sudo touch /root/.ssh/id_rsa ;sudo cat /mnt/c/ProgramData/id_rsa >> /root/.ssh/id_rsa; sudo chmod -R 400 /root/.ssh/id_rsa '   
       
       
       - name: Copy and create ansible host and ansible.cfg files from windows to Ubuntu
