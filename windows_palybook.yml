@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+    - name: Install Chocolatey packages
+      win_chocolatey:
+        name:
+        - vscode
+        - git
+        - slack
+        - dropbox
+        state: latest
