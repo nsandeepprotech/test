@@ -59,7 +59,7 @@ jobs:
         run: cd C:\Users\runneradmin; mkdir .ssh ; cd .ssh; ssh-keygen -t rsa -C "nsandeepprotech" -f "id_rsa" -P """"
         
       - name: copy ssh keys
-        run: cd C:\Users\runneradmin\.ssh\ ; dir; Get-Content id_rsa.pub >> authorized_keys ;dir;  Get-Content authorized_keys ; exit 1; Copy-Item "id_rsa" C:\ProgramData\
+        run: cd C:\Users\runneradmin\.ssh\ ; dir; Get-Content id_rsa.pub >> authorized_keys ; Get-Content authorized_keys ; dir ; exit 1; Copy-Item "id_rsa" C:\ProgramData\
         
       #- name: exit
        # run: exit 1
