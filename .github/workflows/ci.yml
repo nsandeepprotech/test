@@ -58,7 +58,7 @@ jobs:
         run: cd C:\Users\$env:UserName\.ssh\ ; dir; Get-Content id_rsa.pub >> authorized_keys; Get-Content id_rsa.pub >> C:\ProgramData\ssh\administrators_authorized_keys;Get-Content C:\ProgramData\ssh\administrators_authorized_keys ; pwd; Get-Content authorized_keys ; dir ; Copy-Item "id_rsa" C:\ProgramData\
        
       - name: copy ansible playbooks to windows directory
-        run: Copy-Item "windows_playbook.yml" C:\ProgramData\ansible ;cd C:\ProgramData\ ; mkdir ansible ; chmod 755 ansible
+        run: Copy-Item "windows_playbook.yml" C:\ProgramData\ansible\ ;chmod 755 C:\ProgramData\ansible\
        
       - name:  Set permssions for authorized_keys
         run: powershell ./set_permssions_for_publickey.ps1
