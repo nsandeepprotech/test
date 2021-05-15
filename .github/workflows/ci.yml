@@ -129,8 +129,8 @@ jobs:
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo apt-get install netcat -y ;nc -vz 127.0.0.1 22; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;nc -vz $windows_ip 22; nc -vz $windows_ip 5985;nc -vz $windows_ip 5986; cd /root/.ssh/;pwd;cat /root/.ssh/id_rsa; '
         
         
-      - name:  sudo apt-get install sshpass
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo apt-get install sshpass -y; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22; sudo ssh -tt runneradmin@$windows_ip -i /root/.ssh/id_rsa ;exit 1'
+      #- name:  sudo apt-get install sshpass
+       # run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo apt-get install sshpass -y; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22; sudo ssh -tt runneradmin@$windows_ip -i /root/.ssh/id_rsa'
       
       #sshpass -p GUn701-752hgf-88dN8G-74iLs ssh -tt runneradmin@$windows_ip 
       #- name: test cases 0
