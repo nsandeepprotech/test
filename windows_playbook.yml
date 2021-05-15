@@ -9,3 +9,23 @@
         - slack
         - dropbox
         state: latest
+        
+      vars:
+         vscode_extentions:
+          - ms-vscode.powershell
+          - ms-python.python
+          - ms-vscode-remote.remote-wsl
+          - ms-vscode.cpptools
+      
+      
+    - name: checks if extension is installe .?
+      stat:
+      path: "{{ ansible_env.HOME }}/.vscode/extensions/{{ vscode_extentions }}"
+      register: vscode_extension
+
+
+    - name: installs extension for Visual Studio Code
+      command: "'code' --install-extension {{ vscode_extentions }}"
+      when: not vscode_extension.stat.exists
+      
+      
