@@ -18,7 +18,7 @@
           - ms-vscode.cpptools
       
       
-    - name: checks if extension is installe .?
+    - name: checks if extension is installed
       stat:
       path: "{{ ansible_env.HOME }}/.vscode/extensions/{{ vscode_extentions }}"
       register: vscode_extension
