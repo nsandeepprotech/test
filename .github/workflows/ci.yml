@@ -20,8 +20,8 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-    BuildWslExcAndAnsible:
-     name: BuildWslExcAndAnsible
+    BuildWslAndExcAnsible:
+     name: Build_Wsl_Exc_And_Ansible
      runs-on: ${{ matrix.os }}
      strategy:
       matrix:
