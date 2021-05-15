@@ -21,7 +21,7 @@ env:
 jobs:
   # This workflow contains a single job called "build"
     BuildWslAndExcAnsible:
-     name: BuildWslExcAndAnsible
+     name: BuildWslAndExcAnsible
      runs-on: ${{ matrix.os }}
      strategy:
       matrix:
