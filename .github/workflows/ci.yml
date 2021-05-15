@@ -32,12 +32,21 @@ jobs:
 
       - name: Install open SSHServerFeature openssh from choco pakage manager 
         run: choco install --package-parameters=/SSHServerFeature openssh
-
+  
       - name: Add New-NetFirewallRule 22
         run: New-NetFirewallRule -Protocol TCP -LocalPort 22 -Direction Inbound -Action Allow -DisplayName SSH
 
       - name: Test-NetConnection localhost -Port 22 
         run: Test-NetConnection localhost -Port 22 
+        
+      - name: Set-Service sshd 
+        run: Set-Service sshd –StartupType Automatic ; Start-Service sshd
+        
+      - name: Configure PowerShell as the default shell
+        run: New-ItemProperty –Path "HKLM:\SOFTWARE\OpenSSH" –Name DefaultShell –Value "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" –PropertyType String –Force
+        
+      - name: Restart the service and Test-NetConnection localhost -Port 22
+        run: Restart-Service sshd ;Test-NetConnection localhost -Port 22
         
       - name: Get ipv4 from windows and set ipv4 adress in ansible host file.
         run: $localIpAddress=((ipconfig | findstr [0-9].\.)[0]).Split()[-1] ; $localIpAddress;Add-Content -Path "hosts" -Value "server1 ansible_host=$localIpAddress" ; get-content "hosts" ; $localIpAddress | Out-File C:\ProgramData\window_hostname.txt
