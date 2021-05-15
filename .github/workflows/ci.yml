@@ -126,7 +126,7 @@ jobs:
         
         
       - name:  sudo apt-get install sshpass
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo apt-get install sshpass -y; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;sshpass -p GUn701-752hgf-88dN8G-74iLs ssh -t runneradmin@$windows_ip'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run ' sudo apt-get install sshpass -y; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; nc -vz $windows_ip 22;sshpass -p GUn701-752hgf-88dN8G-74iLs ssh -tt runneradmin@$windows_ip'
         
       - name: exit 
         run: exit 1
