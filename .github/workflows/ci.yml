@@ -28,7 +28,11 @@ jobs:
         os:
           - windows-latest
           - windows-2019
-          # - windows-2016 (not working.)
+          - windows-2016
+        experimental:
+           - true
+     #With continue-on-error =true, you can specify if a failure in the job should not trigger a failure in the whole workflow.
+     continue-on-error: ${{ matrix.experimental }}     
     # The type of runner that the job will run on
     # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
 
