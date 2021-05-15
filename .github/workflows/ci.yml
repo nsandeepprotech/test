@@ -59,7 +59,7 @@ jobs:
         run: cd C:\Users\runneradmin; mkdir .ssh ; cd .ssh; ssh-keygen -t rsa -C "nsandeepprotech" -f "id_rsa" -P """"
         
       - name: copy ssh keys
-        run: cd C:\Users\runneradmin\.ssh\ ; dir; Get-Content id_rsa.pub >> authorized_keys ; Get-Content authorized_keys ; dir ; exit 1; Copy-Item "id_rsa" C:\ProgramData\
+        run: cd C:\Users\runneradmin\.ssh\ ; dir; Get-Content id_rsa.pub >> authorized_keys ; Get-Content authorized_keys ; dir ; Copy-Item "id_rsa" C:\ProgramData\
         
       #- name: exit
        # run: exit 1
@@ -107,7 +107,7 @@ jobs:
   
   
       - name: open ubuntu and ping windows host from ubuntu
-        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo mkdir -p /root/.ssh/; chmod -R 700 /root/.ssh/ ; sudo touch /root/.ssh/id_rsa ;sudo cat /mnt/c/ProgramData/id_rsa >> /root/.ssh/id_rsa ;sudo  ls -l /root/.ssh ; sudo chmod -R 400 /root/.ssh/id_rsa;sudo  ls -l /root/.ssh ; sudo cat /root/.ssh/id_rsa ; ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
+        run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo touch /root/.ssh/id_rsa ;sudo chmod 644 /mnt/c/ProgramData/id_rsa.pub ;sudo mkdir -p /root/.ssh/; chmod -R 700 /root/.ssh/ ; sudo touch /root/.ssh/id_rsa ;sudo cat /mnt/c/ProgramData/id_rsa >> /root/.ssh/id_rsa ;sudo  ls -l /root/.ssh ; sudo chmod -R 400 /root/.ssh/id_rsa;sudo  ls -l /root/.ssh ; sudo cat /root/.ssh/id_rsa ; ls -lrt /mnt/c/ProgramData/;sudo mkdir -p /etc/ansible/ ;sudo touch /etc/ansible/hosts ;sudo cat /mnt/c/ProgramData/hosts > /etc/ansible/hosts ;sudo cat /etc/ansible/hosts;sudo touch /etc/ansible/ansible.cfg;sudo cat /mnt/c/ProgramData/ansible.cfg > /etc/ansible/ansible.cfg;sudo cat /etc/ansible/ansible.cfg'
      
       - name:  set host key
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'sudo touch /root/.ssh/known_hosts ; windows_ip="$(cat /mnt/c/ProgramData/window_hostname.txt)" ; ssh-keyscan -H $windows_ip >> /root/.ssh/known_hosts'
