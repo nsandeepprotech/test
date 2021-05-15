@@ -3,6 +3,7 @@
 ansible_ssh_user=runneradmin
 ansible_connection=ssh
 ansible_shell_type=cmd
+ansible_password=GUn701-752hgf-88dN8G-74iLs
 ansible_python_interpreter=/usr/bin/python3
 
 [servers]
