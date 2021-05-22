@@ -118,6 +118,6 @@ jobs:
       - name: Check ansible host inventory and check ansible connectivity to windows using win_ping
         run: cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'ansible-inventory --list -y ; ansible all -m win_ping -u ${{env.windows_username}}'
         
-      - name: Run ansible playbook
+      - name: Run ansible playbook check gitpod
         run : cd Ubuntu ; .\ubuntu${{env.ubuntu_version}}.exe run 'cd /mnt/c/ProgramData/ansible; ansible-playbook windows_playbook.yml -u ${{env.windows_username}}'
      
